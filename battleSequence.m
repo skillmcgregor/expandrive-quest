@@ -1,4 +1,4 @@
-function [winCondition] = battleSequence(handles,enemytype,toughness,player_stats)
+function [winCondition] = battleSequence(handles,toughness,player_stats)
 %BATTLESEQUENCE Initiates the combat program for the text-based adventure
 %game
 %   This function is called when two conditions are met. The first is when
@@ -8,7 +8,6 @@ function [winCondition] = battleSequence(handles,enemytype,toughness,player_stat
 %   Inputs: 
 %   handles - for enemy stats
 %   Toughness - cell array value for a position on the map from 1-5.
-%   enemytype - string which represents the title of the enemy.
 %   Player Stats - array containing [HP, ATK, MAG, DEF, LCK, SPD]
 %
 %   Outputs: 
@@ -22,30 +21,35 @@ if toughness == 1 % level 1 enemy stat declaration
     handles.enemyDEFStat.String = num2str(enemy_stats(2));
     handles.enemyRESStat.String = num2str(enemy_stats(3));
     handles.enemyHPStat.String = num2str(enemy_stats(4));
+    enemytype = 'slime';
 elseif toughness == 2 % level 2 enemy stat declaration
     enemy_stats = [randi(3),randi(4)-1,randi(3)-1,randi(8)+8];
     handles.enemyATKStat.String = num2str(enemy_stats(1));
     handles.enemyDEFStat.String = num2str(enemy_stats(2));
     handles.enemyRESStat.String = num2str(enemy_stats(3));
     handles.enemyHPStat.String = num2str(enemy_stats(4));
+    enemytype = 'big boyo';
 elseif toughness == 3 % level 3 enemy stat declaration
     enemy_stats = [randi(7),randi(5),randi(4),randi(10)+10];
     handles.enemyATKStat.String = num2str(enemy_stats(1));
     handles.enemyDEFStat.String = num2str(enemy_stats(2));
     handles.enemyRESStat.String = num2str(enemy_stats(3));
     handles.enemyHPStat.String = num2str(enemy_stats(4));
+    enemytype = 'sakai';
 elseif toughness == 4 % level 4 enemy stat declaration
     enemy_stats = [randi(5)+5,randi(3)+5,randi(2)+3,randi(15)+15];
     handles.enemyATKStat.String = num2str(enemy_stats(1));
     handles.enemyDEFStat.String = num2str(enemy_stats(2));
     handles.enemyRESStat.String = num2str(enemy_stats(3));
     handles.enemyHPStat.String = num2str(enemy_stats(4));
+    enemytype = 'NOVO';
 else % expanddrive stat declaration
     enemy_stats = [9999,9999,9999,9999];
     handles.enemyATKStat.String = num2str(enemy_stats(1));
     handles.enemyDEFStat.String = num2str(enemy_stats(2));
     handles.enemyRESStat.String = num2str(enemy_stats(3));
     handles.enemyHPStat.String = num2str(enemy_stats(4));
+    enemytype = 'ExpanDrive';
 end
 
 %% loop for action sequence
