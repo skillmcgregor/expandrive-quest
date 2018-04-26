@@ -57,6 +57,9 @@ handles.output = hObject;
 
 % Update handles structure
 guidata(hObject, handles);
+% Initialize Map
+global C;
+C = imread('expandrive.png');
 global Map;
 Map=zeros(40);
 mode=1; % ez mode
@@ -90,7 +93,9 @@ if mode==1
 end
 global position;
 Map(20,20)=0;
-position=Map(20,20);
+Map(20,21) = 1;
+Map(20,19) = 9;
+position=[20,20];
 handles.EXPText.String='0';
 handles.GLDText.String='10';
 % class=handles.classDropdown.Value;
@@ -123,19 +128,23 @@ handles.GLDText.String='10';
 %     LCK=3;
 %     SPD=1;
 % elseif class==6
-    handles.MAGText.String='3';
+    handles.MAGText.String='2';
     handles.ATKText.String='3';
-    handles.HPText.String='15';
-    handles.DEFText.String='3';
-    handles.LCKText.String='3';
+    handles.HPText.String='15/15';
+    handles.DEFText.String='1';
+    handles.LCKText.String='5';
     handles.SPDText.String='3';
+    handles.EXPText.String = '0';
 % end
 global player_stats;
 global phase;
-player_stats=[str2double(handles.HPText.String),str2double(handles.ATKText.String),str2double(handles.MAGText.String),...
+player_stats=[str2double(handles.HPText.String(1:2)),str2double(handles.ATKText.String),str2double(handles.MAGText.String),...
             str2double(handles.DEFText.String),str2double(handles.LCKText.String),str2double(handles.SPDText.String)];
 phase = 0;
 handles.messageText.String=(['You wake up in a clearing...',newline,'Type "walk [cardinal direction]" to walk in that direction.']);
+plot(handles.mapAxes,position(1),position(2),'bo');
+axis(handles.mapAxes,[0 40 0 40]);
+grid on;
 % UIWAIT makes easyGUI wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
@@ -150,11 +159,6 @@ function varargout = easyGUI_OutputFcn(hObject, eventdata, handles)
 % Get default command line output from handles structure
 varargout{1} = handles.output;
 
-%% create matrix and assign values
-
-
-%% establish position, stats
-
 function inputText_Callback(hObject, eventdata, handles)
 % hObject    handle to inputText (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -166,12 +170,42 @@ global phase;
 global player_stats;
 global Map;
 global position;
+global enemy_stats;
+global toughness;
+global C;
 if phase == 0 % walkin'
-    phase = masterGame(handles,position);
-elseif phase == 1 % fightin'
-    phase = battleSequence(handles,toughness,player_stats);
+    [phase,toughness,position] = masterGame(handles,position,Map);
 end
-
+if phase == 1 % startin' a fight
+    [enemy_stats,phase] = startFight(handles,toughness,C);
+end
+if phase == 2 % startin' to shop
+    phase = shopcode3(handles);
+end
+if phase == 3 % fightin'
+    winCondition = battleSequence(handles,enemy_stats,player_stats);
+    if winCondition ~= 0
+        phase = rewardSequence(winCondition,toughness,handles);
+        handles.eATKText.String = 0;
+        handles.eDEFText.String = 0;
+        handles.eRESText.String = 0;
+        handles.eHPText.String = 0;
+        handles.enemyText.String = '';
+        handles.messageText.String = 'Go ahead and walk somewhere.';
+    end
+end
+if phase == 4 % shoppin'
+    phase = buyStuff(handles);
+end
+if str2double(handles.EXPText.String) >= 300
+    Map(position(1)+1,position(2)) = 5;
+    Map(position(1),position(2)+1) = 5;
+    Map(position(1)-1,position(2)) = 5;
+    Map(position(1),position(2)-1) = 5;
+end
+if ~isempty(handles.inputText.String)
+    handles.inputText.String = '';
+end
 
 % --- Executes during object creation, after setting all properties.
 function inputText_CreateFcn(hObject, eventdata, handles)

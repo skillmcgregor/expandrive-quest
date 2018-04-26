@@ -1,4 +1,4 @@
-function critDamage = critStrike(luck,damage)
+function [critDamage,critTrue] = critStrike(luck,damage)
 %CRITSTRIKE Determines whether or not a hit is a critical strike or not.
 %
 % Inputs:
@@ -11,7 +11,9 @@ function critDamage = critStrike(luck,damage)
 critChance = randi(100);
 if (critChance <= luck)
     critDamage = damage*3;
+    critTrue = true;
 else
     critDamage = damage;
+    critTrue = false;
 end
 end

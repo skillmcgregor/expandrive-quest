@@ -1,87 +1,101 @@
-function [phase,toughness,position] = masterGame(handles,position)
+function [phase,toughness,position] = masterGame(handles,position,Map)
 %% Gameplay (walking)
-        if strcmpi(handles.InputText.String,'walk north')
-            if position(1)==0
+        if strcmpi(handles.inputText.String,'walk east')
+            if position(1)==1
                 handles.messageText.String=('You can''t go that way.');
-                position(1)=1;
-            elseif position(1)==41
+                position(1)=2;
+            elseif position(1)==40
                 handles.messageText.String=('You can''t go that way.');
-                position(1)=40;
-            elseif position(2)==0
+                position(1)=39;
+            elseif position(2)==1
                 handles.messageText.String=('You can''t go that way.');
-                position(2)=1;
-            elseif position(2)==41
+                position(2)=2;
+            elseif position(2)==40
                 handles.messageText.String=('You can''t go that way.');
-                position(2)=40;
-            else
-                position(1)=position(1)-1;
-            end
-        elseif strcmpi(handles.InputText.String,'walk south')
-            if position(1)==0
-                handles.messageText.String=('You can''t go that way.');
-                position(1)=1;
-            elseif position(1)==41
-                handles.messageText.String=('You can''t go that way.');
-                position(1)=40;
-            elseif position(2)==0
-                handles.messageText.String=('You can''t go that way.');
-                position(2)=1;
-            elseif position(2)==41
-                handles.messageText.String=('You can''t go that way.');
-                position(2)=40;
+                position(2)=39;
             else
                 position(1)=position(1)+1;
+                handles.XText.String = num2str(position(1));
             end
-        elseif strcmpi(handles.InputText.String,'walk west')
-            if position(1)==0
+        elseif strcmpi(handles.inputText.String,'walk west')
+            if position(1)==1
                 handles.messageText.String=('You can''t go that way.');
-                position(1)=1;
-            elseif position(1)==41
+                position(1)=2;
+            elseif position(1)==40
                 handles.messageText.String=('You can''t go that way.');
-                position(1)=40;
-            elseif position(2)==0
+                position(1)=39;
+            elseif position(2)==1
                 handles.messageText.String=('You can''t go that way.');
-                position(2)=1;
-            elseif position(2)==41
+                position(2)=2;
+            elseif position(2)==40
                 handles.messageText.String=('You can''t go that way.');
-                position(2)=40;
+                position(2)=39;
             else
-                position(2)=position(2)-1;  
+                position(1)=position(1)-1;
+                handles.XText.String = num2str(position(1));
             end
-        elseif strcmpi(handles.InputText.String,'walk east')
-            if position(1)==0
+        elseif strcmpi(handles.inputText.String,'walk south')
+            if position(1)==1
                 handles.messageText.String=('You can''t go that way.');
-                position(1)=1;
-            elseif position(1)==41
+                position(1)=2;
+            elseif position(1)==40
                 handles.messageText.String=('You can''t go that way.');
-                position(1)=40;
-            elseif position(2)==0
+                position(1)=39;
+            elseif position(2)==1
                 handles.messageText.String=('You can''t go that way.');
-                position(2)=1;
-            elseif position(2)==41
+                position(2)=2;
+            elseif position(2)==40
                 handles.messageText.String=('You can''t go that way.');
-                position(2)=40;
+                position(2)=39;
+            else
+                position(2)=position(2)-1;
+                handles.YText.String = num2str(position(2));
+            end
+        elseif strcmpi(handles.inputText.String,'walk north')
+            if position(1)==1
+                handles.messageText.String=('You can''t go that way.');
+                position(1)=2;
+            elseif position(1)==40
+                handles.messageText.String=('You can''t go that way.');
+                position(1)=39;
+            elseif position(2)==1
+                handles.messageText.String=('You can''t go that way.');
+                position(2)=2;
+            elseif position(2)==40
+                handles.messageText.String=('You can''t go that way.');
+                position(2)=39;
             else
                 position(2)=position(2)+1;
+                handles.YText.String = num2str(position(2));
             end
-        elseif strcmpi(handles.InputText.String,'position')
+        elseif strcmpi(handles.inputText.String,'position')
             handles.messageText.String=(['Position: ',num2str(position(1)),',',num2str(position(2))]);
-        elseif strcmpi(handles.InputText.String,'')==false
+        elseif strcmpi(handles.inputText.String,'')==false
             handles.messageText.String=('Nothing happened...');
         end
-    
-    if Map(position(1),position(2))>0 && Map(position(1),position(2))<=4
-        toughness = Map(position(1),position(2));
-        phase = 1; % fight
+    toughness = Map(position(1),position(2));
+    if Map(position(1),position(2))>0 && Map(position(1),position(2))<=5
+        phase = 1;
+        plot(handles.mapAxes,position(1),position(2),'bo');
+        axis(handles.mapAxes,[0 40 0 40]);
+        grid on; % fight
     elseif Map(position(1),position(2))==9
-        shopcode(handles);
-        phase = 2; % shop
+        phase = 2;
+        plot(handles.mapAxes,position(1),position(2),'bo');
+        axis(handles.mapAxes,[0 40 0 40]);
+        grid on; % shop
     else
         if position(1)>16 && position(1)<24 && position(2)>16 && position(2)<24
-            handles.messageText.String=('You are in a clearing.');
+            handles.messageText.String=('You are in a clearing. Walk somewhere more interesting.');
+            plot(handles.mapAxes,position(1),position(2),'bo');
+            axis(handles.mapAxes,[0 40 0 40]);
+            grid on;
             phase = 0;
         else
-            handles.messageText.String=('You are in the forest.');
+            handles.messageText.String=('You are in the forest. Walk somewhere more interesting.');
+            plot(handles.mapAxes,position(1),position(2),'bo');
+            axis(handles.mapAxes,[0 40 0 40]);
+            grid on;
             phase = 0;
         end
     end
