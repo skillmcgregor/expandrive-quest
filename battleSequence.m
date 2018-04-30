@@ -1,4 +1,4 @@
-function [winCondition] = battleSequence(handles,enemy_stats,player_stats)
+function [winCondition] = battleSequence(handles,enemy_stats,player_stats,toughness)
 %BATTLESEQUENCE Initiates the combat program for the text-based adventure
 %game
 %   This function is called when two conditions are met. The first is when
@@ -65,7 +65,12 @@ winCondition = 0;
         winCondition = enemyAttack(handles,player_stats(1),player_stats(4),enemy_stats(1));
         player_stats(4) = player_stats(4)/2; % defense returns to normal
         handles.DEFText.String = num2str(player_stats(4));
-    elseif strcmpi(handles.inputText.String,'run') % player chooses to run
+        handles.messageText.String = ['Actions: ',newline,'"attack"',newline,'"spell"',newline,'"defend"',newline,'"run"'];
+    elseif strcmpi(handles.inputText.String,'run') && toughness < 5 % player chooses to run
         winCondition = 3;
+    elseif strcmpi(handles.inputText.String,'run') && toughness == 5
+        handles.messageText.String='You can''t run from Expandrive.';
+        pause(1)
+        handles.messageText.String = ['Actions: ',newline,'"attack"',newline,'"spell"',newline,'"defend"',newline,'"run"'];
     end
 end

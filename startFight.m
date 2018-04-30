@@ -36,6 +36,8 @@ function [enemy_stats,phase] = startFight(handles,toughness,C)
         handles.enemyText.String = 'ExpanDrive';
         image([780,175],[412,536],C);
     end
+    handles.messageText.String = ['You have come across a(n) ',handles.enemyText.String,'! You can fight or run.'];
+    pause(3)
     handles.messageText.String = ['Actions: ',newline,'"attack"',newline,'"spell"',newline,'"defend"',newline,'"run"'];
     phase = 3;
 end

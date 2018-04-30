@@ -73,7 +73,7 @@ if mode==1
                 Map(ii,jj)=4;
                 end
             elseif ii<=10 && ii>5 || jj<=10 && jj>5 || ii>=30 && jj<35 || jj>=30 && jj<35
-                if monster<25
+                if monster<30
                 Map(ii,jj)=3;
                 end
             elseif ii<=15 && ii>10 || jj<=15 && jj>10 || ii>=25 && jj<30 || jj>=25 && jj<30
@@ -131,7 +131,7 @@ handles.GLDText.String='10';
     handles.MAGText.String='2';
     handles.ATKText.String='3';
     handles.HPText.String='15/15';
-    handles.DEFText.String='1';
+    handles.DEFText.String='3';
     handles.LCKText.String='5';
     handles.SPDText.String='3';
     handles.EXPText.String = '0';
@@ -141,7 +141,7 @@ global phase;
 player_stats=[str2double(handles.HPText.String(1:2)),str2double(handles.ATKText.String),str2double(handles.MAGText.String),...
             str2double(handles.DEFText.String),str2double(handles.LCKText.String),str2double(handles.SPDText.String)];
 phase = 0;
-handles.messageText.String=(['You wake up in a clearing...',newline,'Type "walk [cardinal direction]" to walk in that direction.']);
+handles.messageText.String=(['You wake up in a clearing... You have a dull sword, some tattered armor, and a cracked wand. You should explore.',newline,'Type "walk south" to walk south. This also works for other directions.']);
 plot(handles.mapAxes,position(1),position(2),'bo');
 axis(handles.mapAxes,[0 40 0 40]);
 grid on;
@@ -183,7 +183,7 @@ if phase == 2 % startin' to shop
     phase = shopcode3(handles);
 end
 if phase == 3 % fightin'
-    winCondition = battleSequence(handles,enemy_stats,player_stats);
+    winCondition = battleSequence(handles,enemy_stats,player_stats,toughness);
     if winCondition ~= 0
         phase = rewardSequence(winCondition,toughness,handles);
         handles.eATKText.String = 0;

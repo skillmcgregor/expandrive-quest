@@ -70,8 +70,11 @@ function [phase,toughness,position] = masterGame(handles,position,Map)
             end
         elseif strcmpi(handles.inputText.String,'position')
             handles.messageText.String=(['Position: ',num2str(position(1)),',',num2str(position(2))]);
+        elseif strcmpi(handles.inputText.String,'quit')
+            close all;
         elseif strcmpi(handles.inputText.String,'')==false
             handles.messageText.String=('Nothing happened...');
+            pause(1)
         end
     toughness = Map(position(1),position(2));
     if Map(position(1),position(2))>0 && Map(position(1),position(2))<=5
